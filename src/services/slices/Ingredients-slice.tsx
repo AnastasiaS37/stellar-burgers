@@ -6,6 +6,7 @@ type TIngredientsState = {
   buns: TIngredient[];
   mains: TIngredient[];
   sauces: TIngredient[];
+  all: TIngredient[];
   loading: boolean;
   error: string | null;
 };
@@ -14,6 +15,7 @@ const initialState: TIngredientsState = {
   buns: [],
   mains: [],
   sauces: [],
+  all: [],
   loading: false,
   error: null
 };
@@ -59,6 +61,7 @@ const ingredientsSlice = createSlice({
         state.sauces = action.payload.filter(
           (item: TIngredient) => item.type === 'sauce'
         );
+        state.all = action.payload;
       });
   }
 });

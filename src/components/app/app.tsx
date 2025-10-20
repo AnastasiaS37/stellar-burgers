@@ -16,16 +16,30 @@ import {
   Routes,
   Route,
   useLocation,
-  useNavigate
+  useNavigate,
+  useParams
 } from 'react-router-dom';
-
+import { RootState, useSelector, useDispatch } from '../../services/store';
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
+import { fetchUser, setAuthChecked } from '../../services/slices/User-slice';
+import { getCookie } from '../../utils/cookie';
 
 const AppContent: FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const backgroundLocation = location.state?.background;
+  const dispatch = useDispatch();
+
+  // Проверка пользователя
+  useEffect(() => {
+    const token = getCookie('accessToken');
+    if (token) {
+      dispatch(fetchUser());
+    } else {
+      dispatch(setAuthChecked(true));
+    }
+  }, [dispatch]);
 
   const handleCloseModal = () => {
     navigate(-1);
@@ -45,8 +59,9 @@ const AppContent: FC = () => {
         <Route path='/profile' element={<Profile />} />
         <Route path='/profile/orders' element={<ProfileOrders />} />
         <Route path='*' element={<NotFound404 />} />
-        {/* Если пользователь перейдёт напрямую по /ingredients/:id */}
+        {/* Если пользователь перейдёт напрямую по /ingredients/:id или /feed/:number */}
         <Route path='/ingredients/:id' element={<IngredientDetails />} />
+        <Route path='/feed/:number' element={<OrderInfo />} />
       </Routes>
 
       {backgroundLocation && (
@@ -55,7 +70,7 @@ const AppContent: FC = () => {
           <Route
             path='/feed/:number'
             element={
-              <Modal title='Заголовок' onClose={handleCloseModal}>
+              <Modal title='Детали заказа' onClose={handleCloseModal}>
                 <OrderInfo />
               </Modal>
             }
