@@ -1,22 +1,34 @@
 import { FC, SyntheticEvent, useState } from 'react';
 import { LoginUI } from '@ui-pages';
-import { RootState, useSelector, useDispatch } from '../../services/store';
+import { useDispatch } from '../../services/store';
 import { loginUser } from '../../services/slices/User-slice';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export const Login: FC = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const from = location.state?.from?.pathname || '/';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorText, setErrorText] = useState('');
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    // dispatch(loginUser());
+    dispatch(loginUser({ email, password }))
+      .then(() => {
+        navigate(from, { replace: true });
+      })
+      .catch((err) => {
+        setErrorText(err.message || 'Ошибка авторизации');
+      });
   };
 
   return (
     <LoginUI
-      errorText=''
+      errorText={errorText}
       email={email}
       setEmail={setEmail}
       password={password}

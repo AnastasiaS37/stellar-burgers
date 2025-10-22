@@ -6,7 +6,7 @@ type TOrderState = {
   orderRequest: boolean;
   orderModalData: TOrder | null;
   orderByNumber: TOrder | null;
-  orders: TOrder[];
+  userOrders: TOrder[];
   error: string | null;
 };
 
@@ -14,13 +14,14 @@ const initialState: TOrderState = {
   orderRequest: false,
   orderModalData: null,
   orderByNumber: null,
-  orders: [],
+  userOrders: [],
   error: null
 };
 
-// Получить все заказы
-export const fetchOrders = createAsyncThunk('order/getAllOrders', async () =>
-  getOrdersApi()
+// Получить заказы пользователя
+export const fetchUserOrders = createAsyncThunk(
+  'order/getUserOrders',
+  async () => getOrdersApi()
 );
 
 // Получить заказ по номеру
@@ -58,19 +59,6 @@ const orderSlice = createSlice({
         state.orderRequest = false;
         state.orderModalData = action.payload.order;
       })
-      // Получение всех заказов
-      .addCase(fetchOrders.pending, (state) => {
-        state.orderRequest = true;
-        state.error = null;
-      })
-      .addCase(fetchOrders.rejected, (state, action) => {
-        state.orderRequest = false;
-        state.error = action.error.message ?? null;
-      })
-      .addCase(fetchOrders.fulfilled, (state, action) => {
-        state.orderRequest = false;
-        state.orders = action.payload;
-      })
       // Получение заказа по номеру
       .addCase(fetchOrderByNumber.pending, (state) => {
         state.orderRequest = true;
@@ -84,6 +72,19 @@ const orderSlice = createSlice({
       .addCase(fetchOrderByNumber.fulfilled, (state, action) => {
         state.orderRequest = false;
         state.orderByNumber = action.payload;
+      })
+      // Получение заказов пользователя
+      .addCase(fetchUserOrders.pending, (state) => {
+        state.orderRequest = true;
+        state.error = null;
+      })
+      .addCase(fetchUserOrders.rejected, (state, action) => {
+        state.orderRequest = false;
+        state.error = action.error.message ?? null;
+      })
+      .addCase(fetchUserOrders.fulfilled, (state, action) => {
+        state.orderRequest = false;
+        state.userOrders = action.payload;
       });
   }
 });

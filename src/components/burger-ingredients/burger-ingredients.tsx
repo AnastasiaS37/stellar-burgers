@@ -4,16 +4,11 @@ import { useInView } from 'react-intersection-observer';
 import { TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
 import { RootState, useSelector, useDispatch } from '../../services/store';
-import { getIngredients } from '../../services/slices/Ingredients-slice';
 import { Preloader } from '../../components/ui';
 
 export const BurgerIngredients: FC = () => {
   const dispatch = useDispatch();
 
-  /** TODO: взять переменные из стора */
-  // const buns = [];
-  // const mains = [];
-  // const sauces = [];
   const buns = useSelector((state: RootState) => state.ingredients.buns);
   const mains = useSelector((state: RootState) => state.ingredients.mains);
   const sauces = useSelector((state: RootState) => state.ingredients.sauces);
@@ -37,12 +32,8 @@ export const BurgerIngredients: FC = () => {
     threshold: 0
   });
 
-  // useEffect(() => {
-  //   dispatch(getIngredients());
-  // }, [dispatch]);
-
   if (loading) {
-    return <Preloader />; // Показываем спиннер, пока грузим
+    return <Preloader />;
   }
 
   if (error) {

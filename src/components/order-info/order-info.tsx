@@ -4,25 +4,10 @@ import { OrderInfoUI } from '../ui/order-info';
 import { TIngredient } from '@utils-types';
 import { RootState, useDispatch, useSelector } from '../../services/store';
 import { useParams } from 'react-router-dom';
-import {
-  fetchOrderByNumber,
-  fetchOrders
-} from '../../services/slices/Order-slice';
+import { fetchOrderByNumber } from '../../services/slices/Order-slice';
 
 export const OrderInfo: FC = () => {
   const dispatch = useDispatch();
-
-  /** TODO: взять переменные orderData и ingredients из стора */
-  // const orderData = {
-  //   createdAt: '',
-  //   ingredients: [],
-  //   _id: '',
-  //   status: '',
-  //   name: '',
-  //   updatedAt: 'string',
-  //   number: 0
-  // };
-  // const ingredients: TIngredient[] = [];
 
   const { number } = useParams();
 

@@ -2,7 +2,6 @@ import { createSlice, nanoid } from '@reduxjs/toolkit';
 import { TConstructorIngredient } from '@utils-types';
 
 type TConstructorState = {
-  // bun: { price: number };
   bun: TConstructorIngredient | null;
   ingredients: TConstructorIngredient[];
 };

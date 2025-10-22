@@ -7,18 +7,11 @@ import {
   createOrder
 } from '../../services/slices/Order-slice';
 import { clearConstructor } from '../../services/slices/Constructor-slice';
+import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
-  /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
-  // const constructorItems = {
-  //   bun: {
-  //     price: 0
-  //   },
-  //   ingredients: []
-  // };
-  // const orderRequest
-  // const orderModalData
+  const navigate = useNavigate();
 
   const bun = useSelector((state: RootState) => state.burgerConstructor.bun);
   const ingredients = useSelector(
@@ -32,8 +25,14 @@ export const BurgerConstructor: FC = () => {
     (state: RootState) => state.order.orderModalData
   );
 
+  const user = useSelector((state: RootState) => state.user.user);
+
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
+    if (!user) {
+      navigate('/login');
+      return;
+    }
     const ingredients = [
       constructorItems.bun._id,
       ...constructorItems.ingredients.map((item) => item._id),

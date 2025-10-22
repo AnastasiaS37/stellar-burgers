@@ -27,18 +27,7 @@ export const getIngredients = createAsyncThunk('ingredients/getAll', async () =>
 const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
-  // TODO: Убрать редьюсеры ?
-  reducers: {
-    setBuns: (state, action) => {
-      state.buns = action.payload;
-    },
-    setMains: (state, action) => {
-      state.mains = action.payload;
-    },
-    setSauces: (state, action) => {
-      state.sauces = action.payload;
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getIngredients.pending, (state) => {
@@ -51,7 +40,6 @@ const ingredientsSlice = createSlice({
       })
       .addCase(getIngredients.fulfilled, (state, action) => {
         state.loading = false;
-        // state.buns = action.payload;
         state.buns = action.payload.filter(
           (item: TIngredient) => item.type === 'bun'
         );
@@ -67,4 +55,3 @@ const ingredientsSlice = createSlice({
 });
 
 export default ingredientsSlice.reducer;
-export const { setBuns, setMains, setSauces } = ingredientsSlice.actions;

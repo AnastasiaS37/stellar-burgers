@@ -1,5 +1,4 @@
 import {
-  getIngredientsApi,
   getUserApi,
   loginUserApi,
   logoutApi,
@@ -11,6 +10,7 @@ import {
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { TUser } from '@utils-types';
 import { setCookie } from '../../utils/cookie';
+import { RootState } from '../store';
 
 type TUserState = {
   user: TUser | null;
@@ -25,6 +25,9 @@ const initialState: TUserState = {
   loading: false,
   error: null
 };
+
+// Получение данных пользователя
+export const selectUser = (state: RootState) => state.user.user;
 
 // Регистрация пользователя
 export const registerUser = createAsyncThunk(
@@ -135,7 +138,7 @@ const userSlice = createSlice({
       })
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;
-        state.isAuthChecked = false;
+        state.isAuthChecked = true;
         state.loading = false;
         localStorage.removeItem('refreshToken');
         document.cookie = 'accessToken=; Max-Age=0';

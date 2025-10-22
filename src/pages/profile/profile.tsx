@@ -1,17 +1,15 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
-import { RootState, useSelector, useDispatch } from '../../services/store';
-import { updateUser } from '../../services/slices/User-slice';
+import { useSelector, useDispatch } from '../../services/store';
+import { selectUser, updateUser } from '../../services/slices/User-slice';
+import { Preloader } from '@ui';
 
 export const Profile: FC = () => {
   const dispatch = useDispatch();
 
-  /** TODO: взять переменную из стора */
-  // const user = {
-  //   name: '',
-  //   email: ''
-  // };
-  const user = useSelector((state) => state.user.user);
+  const user = useSelector(selectUser);
+
+  if (!user) return <Preloader />;
 
   const [formValue, setFormValue] = useState({
     name: user?.name ?? '',

@@ -8,8 +8,6 @@ import { getIngredients } from '../../services/slices/Ingredients-slice';
 export const IngredientDetails: FC = () => {
   const dispatch = useDispatch();
 
-  /** TODO: взять переменную из стора */
-  // const ingredientData = null;
   const { id } = useParams();
   const { buns, mains, sauces, loading } = useSelector(
     (state: RootState) => state.ingredients
