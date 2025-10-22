@@ -32,13 +32,23 @@ export const selectUser = (state: RootState) => state.user.user;
 // Регистрация пользователя
 export const registerUser = createAsyncThunk(
   'user/registerUser',
-  async (data: TRegisterData) => registerUserApi(data)
+  async (data: TRegisterData) => {
+    const response = await registerUserApi(data);
+    setCookie('accessToken', response.accessToken);
+    localStorage.setItem('refreshToken', response.refreshToken);
+    return response;
+  }
 );
 
 // Логин
 export const loginUser = createAsyncThunk(
   'user/loginUser',
-  async (data: TLoginData) => loginUserApi(data)
+  async (data: TLoginData) => {
+    const response = await loginUserApi(data);
+    setCookie('accessToken', response.accessToken);
+    localStorage.setItem('refreshToken', response.refreshToken);
+    return response;
+  }
 );
 
 // Получение данных пользователя
@@ -53,9 +63,11 @@ export const updateUser = createAsyncThunk(
 );
 
 // Выход
-export const logoutUser = createAsyncThunk('user/logout', async () =>
-  logoutApi()
-);
+export const logoutUser = createAsyncThunk('user/logout', async () => {
+  await logoutApi();
+  localStorage.removeItem('refreshToken');
+  document.cookie = 'accessToken=; Max-Age=0';
+});
 
 const userSlice = createSlice({
   name: 'user',
@@ -80,8 +92,6 @@ const userSlice = createSlice({
         state.user = action.payload.user;
         state.loading = false;
         state.isAuthChecked = true;
-        setCookie('accessToken', action.payload.accessToken);
-        localStorage.setItem('refreshToken', action.payload.refreshToken);
       })
       // Логин
       .addCase(loginUser.pending, (state) => {
@@ -96,8 +106,6 @@ const userSlice = createSlice({
         state.user = action.payload.user;
         state.loading = false;
         state.isAuthChecked = true;
-        setCookie('accessToken', action.payload.accessToken);
-        localStorage.setItem('refreshToken', action.payload.refreshToken);
       })
       // Получение пользователя
       .addCase(fetchUser.pending, (state) => {
@@ -140,8 +148,6 @@ const userSlice = createSlice({
         state.user = null;
         state.isAuthChecked = true;
         state.loading = false;
-        localStorage.removeItem('refreshToken');
-        document.cookie = 'accessToken=; Max-Age=0';
       });
   }
 });
