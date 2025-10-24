@@ -122,8 +122,28 @@ export const AppContent: FC = () => {
             />
             <Route path='*' element={<NotFound404 />} />
             {/* Если пользователь перейдёт напрямую по этим путям */}
-            <Route path='/ingredients/:id' element={<IngredientDetails />} />
-            <Route path='/feed/:number' element={<OrderInfo />} />
+            <Route
+              path='/ingredients/:id'
+              element={
+                <div className={styles.detailPageWrap}>
+                  <p className={`${styles.title} text text_type_main-large`}>
+                    Детали ингредиента
+                  </p>
+                  <IngredientDetails />
+                </div>
+              }
+            />
+            <Route
+              path='/feed/:number'
+              element={
+                <div className={styles.detailPageWrap}>
+                  <p className={`${styles.title} text text_type_main-large`}>
+                    #{orderNumber}
+                  </p>
+                  <OrderInfo />
+                </div>
+              }
+            />
             <Route
               path='/profile/orders/:number'
               element={
