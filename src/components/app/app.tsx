@@ -1,14 +1,17 @@
-import { ConstructorPage } from '@pages';
 import '../../index.css';
-import styles from './app.module.css';
+import { BrowserRouter } from 'react-router-dom';
+import { FC } from 'react';
+import { AppContent } from './app-content';
 
-import { AppHeader } from '@components';
-
-const App = () => (
-  <div className={styles.app}>
-    <AppHeader />
-    <ConstructorPage />
-  </div>
+const App: FC = () => (
+  <BrowserRouter
+    future={{
+      v7_startTransition: true,
+      v7_relativeSplatPath: true
+    }}
+  >
+    <AppContent />
+  </BrowserRouter>
 );
 
 export default App;
