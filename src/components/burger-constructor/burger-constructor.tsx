@@ -6,7 +6,6 @@ import {
   clearOrderModalData,
   createOrder
 } from '../../services/slices/Order-slice';
-import { clearConstructor } from '../../services/slices/Constructor-slice';
 import { useNavigate } from 'react-router-dom';
 
 export const BurgerConstructor: FC = () => {
@@ -43,7 +42,6 @@ export const BurgerConstructor: FC = () => {
 
   const closeOrderModal = () => {
     dispatch(clearOrderModalData());
-    // dispatch(clearConstructor());
   };
 
   const price = useMemo(
