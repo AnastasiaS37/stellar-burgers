@@ -1,3 +1,5 @@
+import { selectors } from '../support/selectors';
+
 describe('Проверка конструктора бургера', () => {
   beforeEach(() => {
     // Перехватываем запрос на получение ингредиентов
@@ -5,7 +7,7 @@ describe('Проверка конструктора бургера', () => {
       fixture: 'ingredients.json'
     });
 
-    cy.visit('http://localhost:4000/');
+    cy.visit('/');
   });
 
   it('Загрузка ингредиентов', () => {
@@ -16,16 +18,14 @@ describe('Проверка конструктора бургера', () => {
 
   it('Добавление ингредиентов', () => {
     // Добавляем булку
-    cy.get('[data-cy="1"]').find('button').click();
+    cy.get(selectors.bun).find('button').click();
     // Проверяем, что булка добавилась в конструктор
-    cy.get('[data-cy="burger-constructor"]').contains('Булка').should('exist');
+    cy.get(selectors.burgerConstructor).as('constructor').contains('Булка').should('exist');
 
     // Добавляем котлету
-    cy.get('[data-cy="2"]').find('button').click();
+    cy.get(selectors.meat).find('button').click();
     // Проверяем, что котлета добавилась в конструктор
-    cy.get('[data-cy="burger-constructor"]')
-      .contains('Котлета')
-      .should('exist');
+    cy.get('@constructor').contains('Котлета').should('exist');
   });
 });
 
@@ -34,7 +34,7 @@ describe('Проверка работы модальных окон', () => {
     cy.intercept('GET', '**/api/ingredients', {
       fixture: 'ingredients.json'
     });
-    cy.visit('http://localhost:4000/');
+    cy.visit('/');
   });
 
   it('Открытие и закрытие модального окна ингредиента', () => {
@@ -45,7 +45,7 @@ describe('Проверка работы модальных окон', () => {
     cy.contains('200').should('exist');
 
     // Закрываем модальное окно по клику на крестик
-    cy.get('[data-cy="modal-close"]').click();
+    cy.get(selectors.modalClose).click();
     // Проверяем, что модальное окно закрылось
     cy.contains('Детали ингредиента').should('not.exist');
   });
@@ -55,7 +55,7 @@ describe('Проверка работы модальных окон', () => {
     cy.contains('Детали ингредиента').should('exist');
 
     // Закрываем модалку по клику на оверлей
-    cy.get('[data-cy="modal-overlay"]').click({ force: true });
+    cy.get(selectors.modalOverlay).click({ force: true });
     cy.contains('Детали ингредиента').should('not.exist');
   });
 });

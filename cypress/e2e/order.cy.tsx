@@ -1,3 +1,5 @@
+import { selectors } from '../support/selectors';
+
 describe('Создание заказа', () => {
   beforeEach(() => {
     // Запрос на получение ингредиентов
@@ -11,7 +13,7 @@ describe('Создание заказа', () => {
     cy.setCookie('accessToken', 'some-access-token');
     window.localStorage.setItem('refreshToken', 'some-refresh-token');
 
-    cy.visit('http://localhost:4000/');
+    cy.visit('/');
   });
 
   afterEach(() => {
@@ -22,12 +24,10 @@ describe('Создание заказа', () => {
 
   it('Создание заказа', () => {
     // Сборка бургера
-    cy.get('[data-cy="1"]').find('button').click();
-    cy.get('[data-cy="2"]').find('button').click();
-    cy.get('[data-cy="burger-constructor"]').contains('Булка').should('exist');
-    cy.get('[data-cy="burger-constructor"]')
-      .contains('Котлета')
-      .should('exist');
+    cy.get(selectors.bun).find('button').click();
+    cy.get(selectors.meat).find('button').click();
+    cy.get(selectors.burgerConstructor).as('constructor').contains('Булка').should('exist');
+    cy.get('@constructor').contains('Котлета').should('exist');
 
     // Клик на "Оформить заказ"
     cy.contains('Оформить заказ').click();
@@ -37,15 +37,11 @@ describe('Создание заказа', () => {
     cy.contains('12').should('exist');
 
     // Закрываем модальное окно и проверяем закрытие
-    cy.get('[data-cy="modal-close"]').click();
+    cy.get(selectors.modalClose).click();
     cy.contains('Ваш заказ начали готовить').should('not.exist');
 
     // Проверяем, что конструктор пуст
-    cy.get('[data-cy="burger-constructor"]')
-      .contains('Булка')
-      .should('not.exist');
-    cy.get('[data-cy="burger-constructor"]')
-      .contains('Котлета')
-      .should('not.exist');
+    cy.get('@constructor').contains('Булка').should('not.exist');
+    cy.get('@constructor').contains('Котлета').should('not.exist');
   });
 });
