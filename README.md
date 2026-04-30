@@ -38,7 +38,7 @@ react typescript frontend spa redux redux-toolkit routing api authentication
 npm install
 ```
 
-### Development Server
+### Project Running
 
 ```bash
 npm run start
